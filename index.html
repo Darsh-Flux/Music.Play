@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player Design - Easy Tutorials</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/7cc13d3d98.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="music-player">
+        <nav>
+            <div class="circle">
+                <i class="fa-solid fa-music"></i>
+            </div>
+            <div class="circle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+        <img src="Kes.jpg" class="song-img">
+        <h1>Kesariyan</h1>
+        <p>Arijit Singh, Pritam</p>
+
+        <audio id="song">
+            <source src="song.mp3" type="audio/mpeg">
+        </audio>
+        <input type="range" value="0" id="pro">
+
+        <div class="controls">
+            <div><i class="fa-solid fa-backward"></i></div>
+            <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+            <div><i class="fa-solid fa-forward"></i></div>
+        </div>
+    </div>
+</div>    
+<script>
+    let pro = document.getElementById("pro");
+    let song = document.getElementById("song");
+    let ctrlIcon = document.getElementById("ctrlIcon");
+    let intervalId;
+
+    song.onloadedmetadata = function() {
+        pro.max = song.duration;
+        pro.value = song.currentTime;
+    }
+
+    function playPause() {
+        if (ctrlIcon.classList.contains("fa-pause")) {
+            song.pause();
+            clearInterval(intervalId);  // Stop the interval when paused
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+        } else {
+            song.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+
+            // Update the slider while the song is playing
+            intervalId = setInterval(() => {
+                pro.value = song.currentTime;
+            }, 500);
+        }
+    }
+
+    pro.oninput = function() {  // Changed to oninput for better responsiveness
+        song.currentTime = pro.value;
+        if (song.paused) {
+            song.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+    }
+</script>
+</body>
+</html>
